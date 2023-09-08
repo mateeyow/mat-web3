@@ -2,7 +2,9 @@
   "name": "@mat/web3",
   "scripts": {
     "compile": "hardhat compile",
-    "test": "REPORT_GAS=true hardhat test"
+    "test": "REPORT_GAS=true hardhat test",
+    "dev": "hardhat node",
+    "deploy:local": "hardhat run --network localhost scripts/deploy.ts"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.2",

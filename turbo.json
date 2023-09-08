@@ -12,6 +12,7 @@
       "persistent": true
     },
     "compile": {},
-    "test": {}
+    "test": {},
+    "deploy:local": {}
   }
 }

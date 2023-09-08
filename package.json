@@ -7,7 +7,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "compile": "turbo run compile --filter @mat/web3",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "deploy:local": "turbo run deploy:local"
   },
   "keywords": [],
   "devDependencies": {

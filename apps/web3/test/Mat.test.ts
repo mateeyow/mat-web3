@@ -37,7 +37,7 @@ describe("Mat", function () {
     })
   })
 
-  describe('checkin', () => {
+  describe('check-in', () => {
     it('should be able to checkIn successfully', async () => {
       const { mat, otherAccount } = await loadFixture(deployContract)
   

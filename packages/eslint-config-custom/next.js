@@ -38,5 +38,9 @@ module.exports = {
   // add rules configurations here
   rules: {
     "import/no-default-export": "off",
+    "no-console": ["off", { "allow": ["warn", "error", "info"] }],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "eol-last": ["error", "always"],
+    "import/no-extraneous-dependencies": "off"
   },
 };

@@ -1,5 +1,10 @@
+import Login from "./components/login";
+
 export default function Home() {
   return (
-    <main>Hello</main>
+    <main>
+      <h1>My Awesome Token</h1>
+      <Login />
+    </main>
   )
 }

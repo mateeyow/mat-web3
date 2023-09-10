@@ -1,4 +1,5 @@
 const { resolve } = require("node:path");
+const { readdirSync, lstatSync } = require("node:fs");
 
 const project = resolve(process.cwd(), "tsconfig.json");
 
@@ -11,6 +12,12 @@ const project = resolve(process.cwd(), "tsconfig.json");
  *
  */
 
+const getPath = (path) => {
+  return readdirSync(resolve(process.cwd(), path))
+    .filter(entry => entry.substr(0, 1) !== "." && lstatSync(resolve(process.cwd(), path, entry)).isDirectory())
+    .map(entry => resolve(process.cwd(), path, entry))
+}
+
 module.exports = {
   extends: [
     "@vercel/style-guide/eslint/node",
@@ -19,6 +26,7 @@ module.exports = {
     "@vercel/style-guide/eslint/react",
     "@vercel/style-guide/eslint/next",
     "eslint-config-turbo",
+    "eslint-config-prettier"
   ].map(require.resolve),
   parserOptions: {
     project,
@@ -41,6 +49,12 @@ module.exports = {
     "no-console": ["off", { "allow": ["warn", "error", "info"] }],
     "@typescript-eslint/explicit-function-return-type": "off",
     "eol-last": ["error", "always"],
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": ["warn", {
+      "packageDir": [
+        process.cwd(),
+        ...getPath('packages'),
+        ...getPath('apps'),
+      ]
+    }]
   },
 };

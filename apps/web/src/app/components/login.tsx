@@ -1,11 +1,21 @@
 'use client'
+import { Web3 } from 'web3'
+
 export default function Login() {
   const clickMe = async () => {
-    console.info('eth');
-    const MMSDK = new global.MetaMaskSDK();
-    console.log('MMSDK', MMSDK);
-    const eth = MMSDK.getProvider()
-    console.log('eth', eth);
+    // TODO: Might need to extract it to a different type
+    if (typeof window.ethereum === 'undefined') {
+      return null
+    }
+
+    
+
+    try {
+      const accounts = await window.ethereum.request<string[]>({ method: 'eth_requestAccounts' })
+      console.log('accounts', accounts);
+    } catch (err) {
+      console.error('Something went wrong:', err)
+    }
   }
 
   return (

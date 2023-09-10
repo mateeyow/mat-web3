@@ -6,14 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@metamask/providers": "^12.0.0",
+    "@tanstack/react-query": "^4.35.0",
+    "@trpc/client": "^10.38.1",
+    "@trpc/next": "^10.38.1",
+    "@trpc/react-query": "^10.38.1",
+    "@trpc/server": "^10.38.1",
     "next": "^13.4.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "web3": "^4.1.1"
+    "web3": "^4.1.1",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.4.19",
@@ -23,6 +29,7 @@
     "autoprefixer": "10.4.15",
     "eslint-config-custom": "workspace:*",
     "postcss": "8.4.29",
+    "tailwind-config": "workspace:*",
     "tailwindcss": "3.3.3",
     "tsconfig": "workspace:*",
     "typescript": "^4.5.3"

@@ -4,7 +4,10 @@
     "compile": "hardhat compile",
     "test": "REPORT_GAS=true hardhat test",
     "dev": "hardhat node",
-    "deploy:local": "hardhat run --network localhost scripts/deploy.ts"
+    "deploy:local": "hardhat run --network localhost scripts/deploy.ts",
+    "mat:createuser": "hardhat run --network localhost scripts/create-user.ts",
+    "mat:getuser": "hardhat run --network localhost scripts/query-user.ts",
+    "mat:checkin": "hardhat run --network localhost scripts/checkin.ts"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.2",

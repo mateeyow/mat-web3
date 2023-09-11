@@ -29,7 +29,7 @@ contract Mat {
         User storage user = users[userAddress];
 
         user.lastCheckIn = block.timestamp;
-        user.balance = getRandomValue();
+        user.balance += getRandomValue();
 
         emit CheckedIn(userAddress, user.balance);
     }

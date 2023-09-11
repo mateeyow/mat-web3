@@ -4,7 +4,7 @@ import { trpc } from "../utils/trpc";
 import Login from "./components/login";
 
 const Home: AppType = () => {
-  const hello = trpc.test.useQuery({ name: "world" })
+  const hello = trpc.test.useQuery({ name: "Matthew" })
   if (!hello.data) {
     return <div>Loading...</div>
   }
@@ -12,6 +12,7 @@ const Home: AppType = () => {
   return (
     <main>
       <h1>My Awesome Token</h1>
+      {hello.data.message}
       <Login />
     </main>
   )

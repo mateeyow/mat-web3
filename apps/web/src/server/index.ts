@@ -8,7 +8,7 @@ export const appRouter = router({
     }),
   ).query(opts => ({
     message: `Hello ${opts.input.name}`,
-  }))
+  })),
 })
 
 export type AppRouter = typeof appRouter

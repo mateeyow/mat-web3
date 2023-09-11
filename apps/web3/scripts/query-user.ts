@@ -1,13 +1,15 @@
 import { ethers } from 'hardhat'
 
+const { CONTRACT_ADDRESS = '', USER_ADDRESS = '' } = process.env
+
 async function main() {
-  const CONTRACT = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"
-  const USER_ADDRESS = '0x976EA74026E726554dB657fA54763abd0C3a0aa9'
   const NAME = "Mat"
 
-  const mat = await ethers.getContractAt(NAME, CONTRACT)
+  const mat = await ethers.getContractAt(NAME, CONTRACT_ADDRESS)
 
   const user = await mat.getUser(USER_ADDRESS)
+
+  console.log(`User: ${CONTRACT_ADDRESS} has balance of ${user.balance} and has checked in ${new Date(Number(user.lastCheckIn) * 1000)}`)
 }
 
 main().catch((error) => {

@@ -2,16 +2,21 @@
   "name": "mat-web3",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "compile": "turbo run compile --filter @mat/web3",
-    "test": "turbo run test",
-    "deploy:local": "turbo run deploy:local"
+    "build": "dotenv -- turbo run build",
+    "dev": "dotenv -- turbo run dev",
+    "lint": "dotenv -- turbo run lint",
+    "format": "dotenv -- prettier --write \"**/*.{ts,tsx,md}\"",
+    "compile": "dotenv -- turbo run compile --filter @mat/web3",
+    "test": "dotenv -- turbo run test",
+    "deploy:local": "dotenv -- turbo run deploy:local",
+    "web3:deploy:local": "dotenv -- pnpm run --filter @mat/web3 deploy:local",
+    "web3:mat:createuser": "dotenv -- pnpm run --filter @mat/web3 mat:createuser",
+    "web3:mat:getuser": "dotenv -- pnpm run --filter @mat/web3 mat:getuser",
+    "web3:mat:checkin": "dotenv -- pnpm run --filter @mat/web3 mat:checkin"
   },
   "keywords": [],
   "devDependencies": {
+    "dotenv-cli": "^7.3.0",
     "eslint": "^8.48.0",
     "prettier": "^3.0.3",
     "tsconfig": "workspace:*",

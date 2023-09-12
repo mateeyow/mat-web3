@@ -7,11 +7,14 @@
     "deploy:local": "hardhat run --network localhost scripts/deploy.ts",
     "mat:createuser": "hardhat run --network localhost scripts/create-user.ts",
     "mat:getuser": "hardhat run --network localhost scripts/query-user.ts",
-    "mat:checkin": "hardhat run --network localhost scripts/checkin.ts"
+    "mat:checkin": "hardhat run --network localhost scripts/checkin.ts",
+    "typings": "hardhat typechain"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.2",
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@typechain/ethers-v6": "^0.5.0",
+    "@typechain/hardhat": "^9.0.0",
     "@types/chai": "^4.3.6",
     "@types/mocha": "^10.0.1",
     "chai": "^4.3.8",

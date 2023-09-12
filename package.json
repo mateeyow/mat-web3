@@ -12,11 +12,14 @@
     "web3:deploy:local": "dotenv -- pnpm run --filter @mat/web3 deploy:local",
     "web3:mat:createuser": "dotenv -- pnpm run --filter @mat/web3 mat:createuser",
     "web3:mat:getuser": "dotenv -- pnpm run --filter @mat/web3 mat:getuser",
-    "web3:mat:checkin": "dotenv -- pnpm run --filter @mat/web3 mat:checkin"
+    "web3:mat:checkin": "dotenv -- pnpm run --filter @mat/web3 mat:checkin",
+    "prepare": "husky install",
+    "dotenv:push": "dotenv-vault push"
   },
   "keywords": [],
   "devDependencies": {
     "dotenv-cli": "^7.3.0",
+    "dotenv-vault": "^1.25.0",
     "eslint": "^8.48.0",
     "husky": "^8.0.3",
     "prettier": "^3.0.3",

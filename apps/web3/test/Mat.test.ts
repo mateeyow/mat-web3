@@ -27,13 +27,20 @@ describe("Mat", function () {
     it('should create a new user with zero balance', async () => {
       const { mat, otherAccount } = await loadFixture(deployContract)
 
+      await expect(mat.createUser(otherAccount.address))
+        .to.emit(mat, 'NewUser')
+        .withArgs(otherAccount.address)
+    })
+
+    it('should be able to get the newly created user', async () => {
+      const { mat, otherAccount } = await loadFixture(deployContract)
+
       await mat.createUser(otherAccount.address)
 
       const user = await mat.getUser(otherAccount.address)
 
-      expect(user.balance.toString()).to.equal("0")
-      expect(user.lastCheckIn.toString()).to.equal("0")
-      expect(user.initialized).to.be.true;
+      expect(user.balance).to.equal(BigInt(0))
+      expect(user.lastCheckIn).to.equal(BigInt(0))
     })
   })
 
@@ -43,12 +50,13 @@ describe("Mat", function () {
   
       await mat.createUser(otherAccount.address)
 
-      await mat.checkIn(otherAccount.address)
+      await expect(mat.checkIn(otherAccount.address))
+        .to.emit(mat, 'CheckedIn')
+        .withArgs(otherAccount.address, anyValue)
 
       const user = await mat.getUser(otherAccount.address)
-
-      expect(user.balance.toString()).to.not.equal("0")
-      expect(user.lastCheckIn.toString()).to.not.equal("0")
+      expect(user.balance).to.not.equal(BigInt(0))
+      expect(user.lastCheckIn).to.not.equal(BigInt(0))
     })
   })
 });

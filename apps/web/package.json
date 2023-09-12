@@ -6,15 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "mat:getuser": "hardhat run --network localhost src/server/query-user.ts"
   },
   "dependencies": {
     "@metamask/providers": "^12.0.0",
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
     "@tanstack/react-query": "^4.35.0",
     "@trpc/client": "^10.38.1",
     "@trpc/next": "^10.38.1",
     "@trpc/react-query": "^10.38.1",
     "@trpc/server": "^10.38.1",
+    "ethers": "^6.7.1",
     "next": "^13.4.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

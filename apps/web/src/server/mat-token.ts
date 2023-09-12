@@ -1,14 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment --- Disable for now */
- 
-/* eslint-disable @typescript-eslint/no-unsafe-member-access --- Disable for testing */
-/* eslint-disable @typescript-eslint/no-unsafe-argument --- Disable for testing */
 import { ethers } from 'ethers';
-import type { Mat } from 'typechain-types';
-import MAT from './Mat.json'
+import { Mat__factory } from 'types/ethers-contracts/factories/Mat__factory'
+import MAT from './contract/Mat.json'
 
 export const getUser = async () => {
   const provider = ethers.getDefaultProvider("http://127.0.0.1:8545")
-  const mat = new ethers.Contract("0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", MAT.abi, provider) as unknown as Mat
+  const mat = new ethers.Contract("0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", Mat__factory.abi, provider)
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call --- disable for now

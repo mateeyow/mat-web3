@@ -6,9 +6,12 @@ This is a side project to explore web3 and dive in solidity and web3 programming
 
 ## Development
 
-### Fetch env variables
-
+Make sure to get access for dotenv vault for this project. Then do the following steps.
 
 ```
+# Pull .env variables for development
+npx dotenv-vault@latest pull development
+
+# Pull dependencies
 pnpm install
 ```

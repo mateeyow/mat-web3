@@ -9,11 +9,10 @@
     "compile": "dotenv -- turbo run compile --filter @mat/web3",
     "test": "dotenv -- turbo run test",
     "deploy:local": "dotenv -- turbo run deploy:local",
-    "web3:deploy:local": "dotenv -- pnpm run --filter @mat/web3 deploy:local",
     "web3:mat:createuser": "dotenv -- pnpm run --filter @mat/web3 mat:createuser",
     "web3:mat:getuser": "dotenv -- pnpm run --filter @mat/web3 mat:getuser",
     "web3:mat:checkin": "dotenv -- pnpm run --filter @mat/web3 mat:checkin",
-    "prepare": "husky install",
+    "prepare": "husky install && pnpm run --filter @mat/web3 typings && pnpm run --filter @mat/web3 copy:typings",
     "dotenv:push": "dotenv-vault push"
   },
   "keywords": [],

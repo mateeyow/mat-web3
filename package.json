@@ -12,7 +12,8 @@
     "web3:mat:createuser": "dotenv -- pnpm run --filter @mat/web3 mat:createuser",
     "web3:mat:getuser": "dotenv -- pnpm run --filter @mat/web3 mat:getuser",
     "web3:mat:checkin": "dotenv -- pnpm run --filter @mat/web3 mat:checkin",
-    "prepare": "husky install && pnpm run --filter @mat/web3 typings && pnpm run --filter @mat/web3 copy:typings",
+    "web3:prepare": "pnpm run --filter @mat/web3 compile && pnpm run --filter @mat/web3 typings && pnpm run --filter @mat/web3 copy:typings",
+    "prepare": "husky install && pnpm run web3:prepare",
     "dotenv:push": "dotenv-vault push"
   },
   "keywords": [],

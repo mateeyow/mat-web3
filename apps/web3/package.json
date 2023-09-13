@@ -10,7 +10,7 @@
     "mat:checkin": "hardhat run --network localhost scripts/checkin.ts",
     "typings": "typechain --target ethers-v6 artifacts/contracts/Mat.sol/Mat.json",
     "copy:abi": "cp artifacts/contracts/Mat.sol/Mat.json ../web/src/server/contract",
-    "copy:typings": "cp -r typechain-types ../web"
+    "copy:typings": "cp -r types ../web"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.2",

@@ -1,15 +1,21 @@
 import { ethers } from 'ethers';
-import { Mat__factory } from 'types/ethers-contracts/factories/Mat__factory'
-import MAT from './contract/Mat.json'
+import type { Mat } from '../../types/ethers-contracts';
+import MATJson from './contract/Mat.json'
+
+const PROVIDER_URL = "http://127.0.0.1:8545"
+const { CONTRACT_ADDRESS = '', USER_ADDRESS = '' } = process.env
 
 export const getUser = async () => {
-  const provider = ethers.getDefaultProvider("http://127.0.0.1:8545")
-  const mat = new ethers.Contract("0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", Mat__factory.abi, provider)
+  const matJSON = MATJson as unknown as { abi: ethers.InterfaceAbi }
+  const provider = ethers.getDefaultProvider(PROVIDER_URL)
+  const mat = new ethers.Contract(CONTRACT_ADDRESS, matJSON.abi, provider) as unknown as Mat
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call --- disable for now
-    const user = await mat.getUser("0x71bE63f3384f5fb98995898A86B02Fb2426c5788")
-    console.info(`Got a user with balance ${Number(user.balance)}`)
+     
+    const user = await mat.getUser(USER_ADDRESS)
+    const date = new Date(Number(user.lastCheckIn) * 1000).toString()
+
+    console.info(`Got a user with balance ${Number(user.balance)} last checkin is on ${date}`)
   } catch (err) {
     console.error('Something went wrong while getting a user:', err)
   }

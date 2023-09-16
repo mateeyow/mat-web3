@@ -1,29 +1,48 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 // Uncomment this line to use console.log
 // import "hardhat/console.sol";
 
-contract Mat {
-    string public name = "My Awesome Token";
-    string public symbol = "MAT";
+/// @custom:security-contact matthew.torres211@gmail.com
+contract Mat is ERC1155, Ownable {
+    string public constant name = "My Awesome Token";
+    string public constant symbol = "MAT";
     struct User {
         uint lastCheckIn;
         uint balance;
         bool initialized;
     }
 
-    address public owner;
     mapping(address => User) public users;
     uint8 private constant MIN_MINT_AMOUNT = 1;
     uint8 private constant MAX_MINT_AMOUNT = 2;
 
-    constructor() {
-        owner = msg.sender;
-    }
+    constructor() ERC1155("") {}
 
     event CheckedIn(address userAddress, uint balance);
     event NewUser(address userAddress);
+
+    function mint(
+        address account,
+        uint256 id,
+        uint256 amount,
+        bytes memory data
+    ) public onlyOwner {
+        _mint(account, id, amount, data);
+    }
+
+    function mintBatch(
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) public onlyOwner {
+        _mintBatch(to, ids, amounts, data);
+    }
 
     function checkIn(address userAddress) external {
         User storage user = users[userAddress];
@@ -62,5 +81,9 @@ contract Mat {
         user.initialized = true;
 
         emit NewUser(userAddress);
+    }
+
+    function setURI(string memory newuri) public onlyOwner {
+        _setURI(newuri);
     }
 }

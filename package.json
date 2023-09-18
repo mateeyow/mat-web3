@@ -9,6 +9,7 @@
     "compile": "dotenv -- turbo run compile --filter @mat/web3",
     "test": "dotenv -- turbo run test",
     "deploy:local": "dotenv -- turbo run deploy:local",
+    "deploy": "dotenv -- turbo run deploy",
     "web3:mat:createuser": "dotenv -- pnpm run --filter @mat/web3 mat:createuser",
     "web3:mat:getuser": "dotenv -- pnpm run --filter @mat/web3 mat:getuser",
     "web3:mat:checkin": "dotenv -- pnpm run --filter @mat/web3 mat:checkin",

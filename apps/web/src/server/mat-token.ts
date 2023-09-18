@@ -12,10 +12,10 @@ export const getUser = async () => {
 
   try {
      
-    const user = await mat.getUser(USER_ADDRESS)
+    const [user, balance] = await mat.getUser(USER_ADDRESS)
     const date = new Date(Number(user.lastCheckIn) * 1000).toString()
 
-    console.info(`Got a user with balance ${Number(user.balance)} last checkin is on ${date}`)
+    console.info(`Got a user with balance ${Number(balance)} last checkin is on ${date}`)
   } catch (err) {
     console.error('Something went wrong while getting a user:', err)
   }

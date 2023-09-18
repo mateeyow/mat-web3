@@ -43,6 +43,8 @@ module.exports = {
     "no-console": ["off", { "allow": ["warn", "error", "info"] }],
     "@typescript-eslint/explicit-function-return-type": "off",
     "eol-last": ["error", "always"],
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": "off",
+    "react/function-component-definition": "off",
+    "react/button-has-type": "off",
   },
 };

@@ -1,19 +1,35 @@
 import { z } from 'zod'
 import { procedure, router } from './trpc'
-import { getUser } from './mat-token'
+import contract from './contract'
 
 export const appRouter = router({
-  test: procedure.input(
+  login: procedure.input(
     z.object({
-      name: z.string(),
-    }),
-  ).query((opts) => {
-    void getUser()
+      address: z.string()
+    })
+  ).mutation(async (opts) => {
+    console.log('loged in')
+    await contract.createUser(opts.input.address)
 
     return {
-      hello: `Hello ${opts.input.name}`,
+      success: true
     }
   }),
+  checkIn: procedure.input(
+    z.object({
+      address: z.string()
+    })
+  ).mutation(async (opts) => {
+    console.log('checked in')
+    await contract.checkIn(opts.input.address)
+
+    const [user, balance] = await contract.getUser(opts.input.address)
+
+    return {
+      user,
+      balance
+    }
+  })
 })
 
 export type AppRouter = typeof appRouter

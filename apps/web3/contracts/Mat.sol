@@ -7,35 +7,38 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 
 // Uncomment this line to use console.log
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 /// @custom:security-contact matthew.torres211@gmail.com
 contract Mat is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
     uint64 public constant COIN_ID = 0;
+    uint8 private constant MIN_MINT_AMOUNT = 1;
+    uint8 private constant MAX_MINT_AMOUNT = 2;
     string public constant name = "My Awesome Token";
     string public constant symbol = "MAT";
+
     struct User {
         uint lastCheckIn;
-        uint balance;
         bool initialized;
     }
 
     mapping(address => User) public users;
-    uint8 private constant MIN_MINT_AMOUNT = 1;
-    uint8 private constant MAX_MINT_AMOUNT = 2;
 
     constructor() ERC1155("") {}
 
-    event CheckedIn(address userAddress, uint balance);
+    event CheckedIn(address userAddress, uint amount);
     event NewUser(address userAddress);
 
+    // TODO: Add a check to make sure the user has not checked in within the last 24 hours
     function checkIn(address userAddress) external {
         User storage user = users[userAddress];
 
         user.lastCheckIn = block.timestamp;
-        user.balance += getRandomValue();
 
-        emit CheckedIn(userAddress, user.balance);
+        uint coinVal = getRandomValue();
+        _mint(userAddress, COIN_ID, coinVal, "");
+
+        emit CheckedIn(userAddress, coinVal);
     }
 
     function getRandomValue() private view returns (uint) {
@@ -50,11 +53,14 @@ contract Mat is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
             MIN_MINT_AMOUNT;
     }
 
-    function getUser(address userAddress) public view returns (User memory) {
+    function getUser(
+        address userAddress
+    ) public view returns (User memory, uint balance) {
         User memory user = users[userAddress];
         require(user.initialized, "User does not exist");
 
-        return users[userAddress];
+        uint bal = balanceOf(userAddress, COIN_ID);
+        return (users[userAddress], bal);
     }
 
     function createUser(address userAddress) public {
@@ -62,7 +68,6 @@ contract Mat is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
         require(!user.initialized, "User already exists");
 
         user.lastCheckIn = 0;
-        user.balance = 0;
         user.initialized = true;
 
         emit NewUser(userAddress);

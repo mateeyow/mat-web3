@@ -37,9 +37,10 @@ describe("Mat", function () {
 
       await mat.createUser(otherAccount.address)
 
-      const user = await mat.getUser(otherAccount.address)
+      const result = await mat.getUser(otherAccount.address)
+      const { 0: user, 1: balance } = result
 
-      expect(user.balance).to.equal(BigInt(0))
+      expect(balance).to.equal(BigInt(0))
       expect(user.lastCheckIn).to.equal(BigInt(0))
     })
   })
@@ -54,8 +55,10 @@ describe("Mat", function () {
         .to.emit(mat, 'CheckedIn')
         .withArgs(otherAccount.address, anyValue)
 
-      const user = await mat.getUser(otherAccount.address)
-      expect(user.balance).to.not.equal(BigInt(0))
+
+      const result = await mat.getUser(otherAccount.address)
+      const { 0: user, 1: balance } = result
+      expect(balance).to.not.equal(BigInt(5))
       expect(user.lastCheckIn).to.not.equal(BigInt(0))
     })
   })

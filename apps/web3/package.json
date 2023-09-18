@@ -2,7 +2,7 @@
   "name": "@mat/web3",
   "scripts": {
     "compile": "hardhat compile",
-    "test": "REPORT_GAS=true mocha --bail --recursive test",
+    "test": "REPORT_GAS=true hardhat test",
     "dev": "hardhat node",
     "deploy:local": "hardhat run --network localhost scripts/deploy.ts",
     "mat:createuser": "hardhat run --network localhost scripts/create-user.ts",

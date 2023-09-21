@@ -8,8 +8,13 @@ export const appRouter = router({
       address: z.string()
     })
   ).mutation(async (opts) => {
-    console.log('loged in')
-    await contract.createUser(opts.input.address)
+    try {
+      console.log('creating user', opts.input.address)
+      await contract.createUser(opts.input.address)
+      console.log('success!')
+    } catch (err) {
+      console.error(`Error creating user`, err)
+    }
 
     return {
       success: true

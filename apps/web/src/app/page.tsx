@@ -1,19 +1,20 @@
 'use client'
 import type { AppType } from "next/app";
 import { useState } from "react";
-import { trpc } from "../utils/trpc";
 import Button from "@/components/button";
+import { trpc } from "../utils/trpc";
 
 const Home: AppType = () => {
   const [address, setAddress] = useState<string>()
   const login = trpc.login.useMutation()
   const checkIn = trpc.checkIn.useMutation()
+  
   const onCheckIn = () => {
     if (!address?.length) {
       return null
     }
 
-    login.mutate({ address })
+    checkIn.mutate({ address })
   }
 
   const onMetamaskConnect = async () => {
@@ -23,9 +24,10 @@ const Home: AppType = () => {
 
     try {
       const accounts = await window.ethereum.request<string[]>({ method: 'eth_requestAccounts' })
+      console.log('accounts', accounts);
       if (accounts?.length && accounts[0]) {
         setAddress(accounts[0])
-        checkIn.mutate({ address: accounts[0] })
+        login.mutate({ address: accounts[0] })
       }
     } catch (err) {
       console.error('Something went wrong:', err)
@@ -36,7 +38,7 @@ const Home: AppType = () => {
     <main>
       <h1>My Awesome Token</h1>
       {/* {hello.data.message} */}
-      <Button onClick={onMetamaskConnect}>{
+      <Button onClick={() => void onMetamaskConnect()}>{
         address?.length ? 'Connected' : 'Connect Metamask Wallet'
       }</Button>
       <div>

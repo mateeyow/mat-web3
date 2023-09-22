@@ -6,9 +6,9 @@
     "dev": "hardhat node",
     "deploy": "hardhat run scripts/deploy.ts",
     "deploy:local": "hardhat run --network localhost scripts/deploy.ts",
-    "mat:createuser": "hardhat run --network localhost scripts/create-user.ts",
-    "mat:getuser": "hardhat run --network localhost scripts/query-user.ts",
-    "mat:checkin": "hardhat run --network localhost scripts/checkin.ts",
+    "mat:createuser": "hardhat run scripts/create-user.ts",
+    "mat:getuser": "hardhat run scripts/query-user.ts",
+    "mat:checkin": "hardhat run scripts/checkin.ts",
     "typings": "typechain --target ethers-v6 artifacts/contracts/Mat.sol/Mat.json",
     "copy:abi": "cp artifacts/contracts/Mat.sol/Mat.json ../web/src/server/contract",
     "copy:typings": "cp -r types ../web"

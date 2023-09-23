@@ -2,47 +2,63 @@ import { ethers } from 'ethers';
 import type { Mat } from '../../../types/ethers-contracts';
 import MATJson from './Mat.json'
 
+interface Abi {
+  abi: ethers.InterfaceAbi
+  bytecode: ethers.BytesLike
+}
+
 const { ALCHEMY_CONTRACT_ADDRESS = '', ALCHEMY_API_KEY = '', METAMASK_PRIVATE_KEY = '' } = process.env
-const matJSON = MATJson as unknown as { abi: ethers.InterfaceAbi, bytecode: ethers.BytesLike }
 
-class Contract {
-  // mat: Mat
-  
-  // constructor() {
-  //   // const matJSON = MATJson as unknown as { abi: ethers.InterfaceAbi }
-  //   // const provider = new ethers.AlchemyProvider("sepolia", ALCHEMY_API_KEY)
-  //   // const signer = provider.getSigner()
-  //   // // const provider = ethers.getDefaultProvider(PROVIDER_URL)
-  //   // const mat = new ethers.Contract(ALCHEMY_CONTRACT_ADDRESS, matJSON.abi, signer) as unknown as Mat
+const isMatContract = (contract: unknown): contract is Mat => {
+  const matContract = contract as Mat
 
-  //   // this.mat = mat  
-  // }
+  return typeof matContract.checkIn === 'function'
+    && typeof matContract.createUser === 'function'
+    && typeof matContract.getUser === 'function'
+}
 
-  async checkIn(address: string) {
-    const provider = new ethers.AlchemyProvider("sepolia", ALCHEMY_API_KEY)
-    const signer = await provider.getSigner()
-    // const provider = ethers.getDefaultProvider(PROVIDER_URL)
-    const mat = new ethers.Contract(ALCHEMY_CONTRACT_ADDRESS, matJSON.abi, signer) as unknown as Mat
-    return mat.checkIn(address)
-  }
+const isAbi = (abi: unknown): abi is Abi => {
+  const abiArray = abi as Abi
 
-  async getUser(address: string) {
-    const provider = new ethers.AlchemyProvider("sepolia", ALCHEMY_API_KEY)
-    const mat = new ethers.Contract(ALCHEMY_CONTRACT_ADDRESS, matJSON.abi, provider) as unknown as Mat
-    const [user, balance] = await mat.getUser(address)
-    console.log('user', user);
-    console.log('balance', balance);
-    return 'hello'
-    // return mat.getUser(address)
-  }
+  return typeof abiArray.abi === 'object'
+    && typeof abiArray.bytecode === 'string'
+}
 
-  async createUser(address: string) {
+class MATContract {
+  public provider: ethers.AlchemyProvider
+  public wallet: ethers.Wallet
+  public contract: Mat
+
+  constructor() {
+    if (!isAbi(MATJson)) {
+      throw new Error('ABI is not a valid ABI')
+    }
+
+    const abiData = MATJson.abi
     const provider = new ethers.AlchemyProvider("sepolia", ALCHEMY_API_KEY)
     const wallet = new ethers.Wallet(METAMASK_PRIVATE_KEY, provider)
-    const mat = new ethers.Contract(ALCHEMY_CONTRACT_ADDRESS, matJSON.abi, wallet) as unknown as Mat
-    await mat.createUser(address)
-    return true
+    const contract = new ethers.Contract(ALCHEMY_CONTRACT_ADDRESS, abiData, wallet)
+
+    if (!isMatContract(contract)) {
+      throw new Error('Contract is not a Mat contract')
+    }
+
+    this.provider = provider
+    this.wallet = wallet
+    this.contract = contract
+  }
+
+  createUser(address: string) {
+    return this.contract.createUser(address)
+  }
+
+  getUser(address: string) {
+    return this.contract.getUser(address)
+  }
+
+  checkIn(address: string) {
+    return this.contract.checkIn(address)
   }
 }
 
-export default new Contract()
+export default MATContract

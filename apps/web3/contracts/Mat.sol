@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 
 // Uncomment this line to use console.log
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
 /// @custom:security-contact matthew.torres211@gmail.com
 contract Mat is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
@@ -30,7 +30,6 @@ contract Mat is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
     event CheckedIn(address userAddress, uint amount);
     event NewUser(address userAddress);
 
-    // TODO: Add a check to make sure the user has not checked in within the last 24 hours
     function checkIn(address userAddress) external {
         User storage user = users[userAddress];
         bool hasCheckedInToday = hasCheckedIn(

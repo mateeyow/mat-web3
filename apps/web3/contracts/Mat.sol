@@ -14,6 +14,7 @@ contract Mat is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
     uint64 public constant COIN_ID = 0;
     uint8 private constant MIN_MINT_AMOUNT = 1;
     uint8 private constant MAX_MINT_AMOUNT = 2;
+    uint private constant CHECK_IN_INTERVAL = 86400; // 24 hours
     string public constant name = "My Awesome Token";
     string public constant symbol = "MAT";
 
@@ -32,6 +33,11 @@ contract Mat is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
     // TODO: Add a check to make sure the user has not checked in within the last 24 hours
     function checkIn(address userAddress) external {
         User storage user = users[userAddress];
+        bool hasCheckedInToday = hasCheckedIn(
+            user.lastCheckIn,
+            block.timestamp
+        );
+        require(!hasCheckedInToday, "User has already checked in today");
 
         user.lastCheckIn = block.timestamp;
 
@@ -71,6 +77,13 @@ contract Mat is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
         user.initialized = true;
 
         emit NewUser(userAddress);
+    }
+
+    function hasCheckedIn(
+        uint lastCheckIn,
+        uint timeNow
+    ) private pure returns (bool) {
+        return timeNow - lastCheckIn < CHECK_IN_INTERVAL;
     }
 
     function setURI(string memory newuri) public onlyOwner {

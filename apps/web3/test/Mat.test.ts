@@ -60,5 +60,16 @@ describe("Mat", function () {
       expect(balance).to.not.equal(BigInt(5))
       expect(user.lastCheckIn).to.not.equal(BigInt(0))
     })
+
+    it('should fail to checkIn if the user has checked in within the last 24 hours', async () => {
+      const { mat, otherAccount } = await loadFixture(deployContract)
+  
+      await mat.createUser(otherAccount.address)
+
+      await mat.checkIn(otherAccount.address)
+
+      await expect(mat.checkIn(otherAccount.address))
+        .to.be.revertedWith('User has already checked in today')
+    })
   })
 });

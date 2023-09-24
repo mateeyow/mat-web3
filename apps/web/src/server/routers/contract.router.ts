@@ -1,10 +1,11 @@
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import { procedure, router } from '../trpc.server'
-import { asyncResult } from '../util'
+import { asyncResult, convertToDate } from '../util'
+import { CONTRACT_ERROR_MESSAGES } from '../constant';
 
 interface BigNumber {
-  gte: (other: BigNumber) => boolean;
+  gte: (_: BigNumber) => boolean;
   toString: () => string;
 }
 
@@ -66,6 +67,46 @@ const login = procedure.input(
   }
 })
 
+const getUser = procedure.input(
+  z.object({
+    address: z.string()
+  })
+).query(async ({ input, ctx }) => {
+  const [result, error] = await asyncResult(() => ctx.mat.getUser(input.address))
+
+  if (error) {
+    console.error('Error getting user:', error)
+    const ethError = error as EthersError
+
+    if (ethError.reason?.includes(CONTRACT_ERROR_MESSAGES.USER_NOT_FOUND)) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'User not found',
+      })
+    }
+
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Error getting user',
+      cause: error,
+    })
+  }
+
+  if (!result) {
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: 'User not found',
+    })
+  }
+
+  const [user, balance] = result
+
+  return {
+    lastCheckIn: convertToDate(user.lastCheckIn),
+    balance: Number(balance)
+  }
+})
+
 const checkIn = procedure.input(
   z.object({
     address: z.string()
@@ -77,7 +118,7 @@ const checkIn = procedure.input(
     console.error('Error checking in:', error)
     const ethersError = error as EthersError
 
-    if (ethersError.reason?.includes('already checked in')) {
+    if (ethersError.reason?.includes(CONTRACT_ERROR_MESSAGES.USER_ALREADY_CHECKED_IN)) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'User has already checked in today',
@@ -111,12 +152,13 @@ const checkIn = procedure.input(
   const [user, balance] = result
 
   return {
-    lastCheckIn: new Date(Number(user.lastCheckIn) * 1000),
+    lastCheckIn: convertToDate(user.lastCheckIn),
     balance: Number(balance)
   }
 })
 
 export const contractRouter = router({
   login,
-  checkIn
+  checkIn,
+  getUser,
 })

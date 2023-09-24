@@ -1,5 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
+import { font } from './fonts'
 
 export const metadata: Metadata = {
   title: 'MAT | My Awesome Token',
@@ -12,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html className={`${font.variable}`} lang="en">
       <body>
         {children}
       </body>

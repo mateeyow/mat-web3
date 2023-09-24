@@ -93,9 +93,6 @@ importers:
       postcss:
         specifier: 8.4.29
         version: 8.4.29
-      tailwind-config:
-        specifier: workspace:*
-        version: link:../../packages/tailwind-config
       tailwindcss:
         specifier: 3.3.3
         version: 3.3.3(ts-node@10.9.1)
@@ -157,12 +154,6 @@ importers:
       eslint-config-turbo:
         specifier: ^1.10.12
         version: 1.10.12(eslint@8.48.0)
-
-  packages/tailwind-config:
-    devDependencies:
-      tailwindcss:
-        specifier: ^3.2.4
-        version: 3.3.3(ts-node@10.9.1)
 
   packages/tsconfig: {}
 

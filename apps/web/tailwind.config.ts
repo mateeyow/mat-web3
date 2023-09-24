@@ -1,8 +1,16 @@
-import type { Config } from 'tailwindcss'
-import sharedConfig from "tailwind-config/tailwind.config";
+import type { Config } from "tailwindcss";
 
-const config: Pick<Config, "presets"> = {
-  presets: [sharedConfig],
+const config: Config = {
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  theme: {
+    extend: {
+      backgroundImage: {},
+      fontFamily: {
+        sans: ['var(--font-pixel)']
+      }
+    },
+  },
+  plugins: [],
 };
 
 export default config;

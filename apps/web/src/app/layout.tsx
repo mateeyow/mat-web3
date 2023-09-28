@@ -16,7 +16,6 @@ export default function RootLayout({
     <html className={`${font.variable}`} lang="en">
       <body className='bg-primary text-white'>
         {children}
-        some-text
       </body>
     </html>
   )

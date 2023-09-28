@@ -72,7 +72,9 @@ const getUser = procedure.input(
     address: z.string()
   })
 ).query(async ({ input, ctx }) => {
+  console.log('called?')
   const [result, error] = await asyncResult(() => ctx.mat.getUser(input.address))
+  console.log('result', result);
 
   if (error) {
     console.error('Error getting user:', error)
@@ -99,11 +101,9 @@ const getUser = procedure.input(
     })
   }
 
-  const [user, balance] = result
-
   return {
-    lastCheckIn: convertToDate(user.lastCheckIn),
-    balance: Number(balance)
+    lastCheckIn: convertToDate(result[0] as unknown as bigint),
+    balance: Number(result.balance)
   }
 })
 

@@ -46,6 +46,7 @@ module.exports = {
     "import/no-extraneous-dependencies": "off",
     "react/function-component-definition": "off",
     "react/button-has-type": "off",
-    "@typescript-eslint/naming-convention": "off"
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/no-unnecessary-condition": "off",
   },
 };

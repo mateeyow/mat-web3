@@ -8,5 +8,6 @@ export const asyncResult = async <T>(fn: () => Promise<T>) => {
 }
 
 export const convertToDate = (timestamp: bigint) => {
+  console.log('timestamp', timestamp);
   return new Date(Number(timestamp) * 1000)
 }

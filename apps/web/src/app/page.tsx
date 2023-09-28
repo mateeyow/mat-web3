@@ -8,13 +8,17 @@ const Home: AppType = () => {
   const [address, setAddress] = useState<string>()
   const login = trpc.contract.login.useMutation()
   const checkIn = trpc.contract.checkIn.useMutation()
+  const { data, refetch } = trpc.contract.getUser.useQuery({ address }, { enabled: Boolean(address) })
   
-  const onCheckIn = () => {
+  const balance = data?.balance ?? 0.00
+
+  const onCheckIn = async () => {
     if (!address?.length) {
       return null
     }
 
     checkIn.mutate({ address })
+    await refetch()
   }
 
   const onMetamaskConnect = async () => {
@@ -39,15 +43,20 @@ const Home: AppType = () => {
 
   return (
     <main>
-      <h1>My Awesome Token</h1>
-      {/* {hello.data.message} */}
-      <Button onClick={() => void onMetamaskConnect()}>{
-        address?.length ? 'Connected' : 'Connect Metamask Wallet'
-      }</Button>
-      <div>
-        <Button isDisabled={!address?.length} onClick={onCheckIn}>
-          {address?.length ? 'Check In' : 'Please Connect Your Metamask Wallet'}
-        </Button>
+      <div className="grid grid-cols-4 grid-rows-content h-screen">
+        <div className='col-span-3 col-start-2 p-4'>
+          <div className='flex'>
+            <Button className="ms-auto" onClick={() => void onMetamaskConnect()}>
+              {address?.length ? 'Connected' : 'Connect Metamask Wallet'}
+            </Button>
+          </div>
+        </div>
+        <div className='col-span-4 flex flex-col justify-center items-center gap-y-12'>
+          <h1 className='text-5xl'>${balance}</h1>
+          <Button onClick={() => address?.length ? void onCheckIn() : void onMetamaskConnect()}>
+            {address?.length ? 'Check In' : 'Please Connect Your Metamask Wallet'}
+          </Button>
+        </div>
       </div>
     </main>
   )

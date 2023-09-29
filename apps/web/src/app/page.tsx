@@ -1,6 +1,7 @@
 'use client'
 import type { AppType } from "next/app";
 import { useState } from "react";
+import toast, { Toaster } from 'react-hot-toast'
 import Button from "@/components/button";
 import { trpc } from "../utils/trpc";
 
@@ -41,8 +42,14 @@ const Home: AppType = () => {
     }
   }
 
+  const toastify = () => {
+    toast('my toast')
+  }
+
   return (
     <main>
+      <Toaster />
+      <Button onClick={toastify}>Toastify</Button>
       <div className="grid grid-cols-4 grid-rows-content h-screen">
         <div className='col-span-3 col-start-2 p-4'>
           <div className='flex'>

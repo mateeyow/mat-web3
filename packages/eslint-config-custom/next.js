@@ -48,5 +48,6 @@ module.exports = {
     "react/button-has-type": "off",
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/no-unnecessary-condition": "off",
+    "prefer-named-capture-group": "off",
   },
 };

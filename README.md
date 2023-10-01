@@ -14,6 +14,9 @@ npx dotenv-vault@latest pull development
 
 # Pull dependencies
 pnpm install
+
+# Run dev server
+pnpm dev
 ```
 
 ## TODO
@@ -22,4 +25,4 @@ pnpm install
 - [ ] - Add github workflow
 - [ ] - Fix dev workflow to get the correct contract, artifacts, types, etc.
 - [ ] - Add music
-- [ ] - Fix error messages, and loading state
+- [ ] - Make page responsive

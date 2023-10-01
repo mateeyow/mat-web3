@@ -1,20 +1,25 @@
 'use client'
 import type { AppType } from "next/app";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Toaster } from 'react-hot-toast'
 import type { TRPCClientErrorBase } from "@trpc/client";
 import type { DefaultErrorShape } from "@trpc/server";
 import { format } from 'date-fns'
 import Button from "@/components/button";
+import { PlayIcon, PauseIcon } from '@/components/icons'
 import { toast } from '@/components/toast'
 import { trpc } from "../utils/trpc";
+import neon from './audio/neon.mp3'
 
 const onError = (error: TRPCClientErrorBase<DefaultErrorShape>) => {
   toast(error.message)
 }
 
 const Home: AppType = () => {
+  const iconClassName = 'fill-white h-20 cursor-pointer'
+  const audioRef = useRef<HTMLAudioElement>(null)
   const [address, setAddress] = useState<string>()
+  const [isPlaying, setIsPlaying] = useState(false)
   const { mutate: loginMutation, isLoading: isLoginLoading } = trpc.contract.login.useMutation({
     onError
   })
@@ -25,7 +30,7 @@ const Home: AppType = () => {
     enabled: Boolean(address) && !isCheckInLoading,
     onError,
   })
-  
+
   const balance = data?.balance ?? 0.00
 
   const onCheckIn = async () => {
@@ -57,10 +62,22 @@ const Home: AppType = () => {
     }
   }
 
+  const onPlayStop = () => {
+    setIsPlaying((state: boolean) => !state)
+  }
+
+  useEffect(() => {
+    const audio = new Audio(neon)
+    audioRef.current = audio
+  }, [])
+
   return (
     <main>
       <Toaster position='top-left' />
       <div className="grid grid-cols-4 grid-rows-content h-screen">
+        <div className='p-1'>
+          {isPlaying ? <PauseIcon className={iconClassName} onClick={onPlayStop} /> : <PlayIcon className={iconClassName} onClick={onPlayStop} />}
+        </div>
         <div className='col-span-3 col-start-2 p-4'>
           <div className='flex'>
             <Button className="ms-auto" isLoading={isLoginLoading} onClick={() => void onMetamaskConnect()}>

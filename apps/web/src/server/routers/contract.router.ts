@@ -147,16 +147,7 @@ const checkIn = procedure.input(
     })
   }
 
-  const [user] = result
-
-  const [balance, balanceError] = await asyncResult(() => ctx.mat.balanceOf(input.address))
-  if (balanceError) {
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Error getting balance',
-      cause: balanceError,
-    })
-  }
+  const [user, balance] = result
 
   return {
     lastCheckIn: convertToDate(user.lastCheckIn),

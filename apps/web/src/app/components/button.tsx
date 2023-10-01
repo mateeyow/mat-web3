@@ -17,8 +17,10 @@ export default function Button(props: ButtonProps) {
   }
 
   const text = isLoading ? 'Loading...' : children;
+  const isCursorPointer = !isDisabled && !isLoading;
+  const _isDisabled = isDisabled || isLoading;
 
   return (
-    <button className={`${isDisabled ? 'cursor-default' : 'cursor-pointer'} p-4 border-white border shadow-pixel m-1 ${className}`} disabled={isDisabled} onClick={_onClick} type={type}>{text}</button>
+    <button className={`${isCursorPointer ? 'cursor-pointer' : 'cursor-default'} p-4 border-white border shadow-pixel m-1 ${className}`} disabled={_isDisabled} onClick={_onClick} type={type}>{text}</button>
   )
 }

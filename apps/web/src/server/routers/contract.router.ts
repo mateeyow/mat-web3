@@ -87,7 +87,7 @@ const getUser = procedure.input(
 
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
-      message: 'Error getting user',
+      message: 'Error getting user, please try again',
       cause: error,
     })
   }
@@ -99,9 +99,12 @@ const getUser = procedure.input(
     })
   }
 
+  const [user, balance] = result
+  console.log('user.lastCheckIn', user.lastCheckIn);
+
   return {
-    lastCheckIn: convertToDate(result[0] as unknown as bigint),
-    balance: Number(result.balance)
+    lastCheckIn: convertToDate(user.lastCheckIn),
+    balance: Number(balance)
   }
 })
 
@@ -125,7 +128,7 @@ const checkIn = procedure.input(
     
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
-      message: 'Error checking in',
+      message: 'Error checking in, please try again',
       cause: error,
     })
   }
@@ -135,7 +138,7 @@ const checkIn = procedure.input(
     console.error('Error getting user:', getUserErr)
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
-      message: 'Error getting user',
+      message: 'Error getting user, please try again',
       cause: getUserErr,
     })
   }
@@ -143,7 +146,7 @@ const checkIn = procedure.input(
   if (!result) {
     throw new TRPCError({
       code: 'NOT_FOUND',
-      message: 'User not found',
+      message: 'User not found.',
     })
   }
 

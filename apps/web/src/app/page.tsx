@@ -63,11 +63,17 @@ const Home: AppType = () => {
   }
 
   const onPlayStop = () => {
-    setIsPlaying((state: boolean) => !state)
+    if (isPlaying) {
+      audioRef.current?.pause()
+      setIsPlaying(false)
+    } else {
+      void audioRef.current?.play()
+      setIsPlaying(true)
+    }
   }
 
   useEffect(() => {
-    const audio = new Audio(neon)
+    const audio = new Audio(neon).play()
     audioRef.current = audio
   }, [])
 

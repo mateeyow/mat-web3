@@ -20,3 +20,6 @@ pnpm install
 
 - [ ] - Fix linter and prettier for all apps
 - [ ] - Add github workflow
+- [ ] - Fix dev workflow to get the correct contract, artifacts, types, etc.
+- [ ] - Add music
+- [ ] - Fix error messages, and loading state

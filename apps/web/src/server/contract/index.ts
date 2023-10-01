@@ -59,6 +59,11 @@ class MATContract {
   checkIn(address: string) {
     return this.contract.checkIn(address)
   }
+
+  async balanceOf(address: string) {
+    const coinID = await this.contract.COIN_ID()
+    return this.contract.balanceOf(address, coinID)
+  }
 }
 
 export default MATContract

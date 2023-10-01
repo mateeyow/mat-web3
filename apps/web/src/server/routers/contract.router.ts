@@ -72,9 +72,7 @@ const getUser = procedure.input(
     address: z.string()
   })
 ).query(async ({ input, ctx }) => {
-  console.log('called?')
   const [result, error] = await asyncResult(() => ctx.mat.getUser(input.address))
-  console.log('result', result);
 
   if (error) {
     console.error('Error getting user:', error)
@@ -149,7 +147,16 @@ const checkIn = procedure.input(
     })
   }
 
-  const [user, balance] = result
+  const [user] = result
+
+  const [balance, balanceError] = await asyncResult(() => ctx.mat.balanceOf(input.address))
+  if (balanceError) {
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Error getting balance',
+      cause: balanceError,
+    })
+  }
 
   return {
     lastCheckIn: convertToDate(user.lastCheckIn),

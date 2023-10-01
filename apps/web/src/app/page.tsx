@@ -10,7 +10,7 @@ const Home: AppType = () => {
   const [address, setAddress] = useState<string>()
   const login = trpc.contract.login.useMutation()
   const checkIn = trpc.contract.checkIn.useMutation()
-  const { data, refetch } = trpc.contract.getUser.useQuery({ address }, { enabled: Boolean(address) })
+  const { data, refetch } = trpc.contract.getUser.useQuery({ address }, { enabled: Boolean(address) && !checkIn.isLoading })
   
   const balance = data?.balance ?? 0.00
 
@@ -43,15 +43,9 @@ const Home: AppType = () => {
     }
   }
 
-  const toastify = () => {
-    // toaster("Hey There!")
-    toast("Hey There!")
-  }
-
   return (
     <main>
       <Toaster position='top-left' />
-      <Button onClick={toastify}>Toastify</Button>
       <div className="grid grid-cols-4 grid-rows-content h-screen">
         <div className='col-span-3 col-start-2 p-4'>
           <div className='flex'>

@@ -15,3 +15,8 @@ npx dotenv-vault@latest pull development
 # Pull dependencies
 pnpm install
 ```
+
+## TODO
+
+- [ ] - Fix linter and prettier for all apps
+- [ ] - Add github workflow

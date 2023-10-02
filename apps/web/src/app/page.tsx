@@ -15,19 +15,26 @@ const onError = (error: TRPCClientErrorBase<DefaultErrorShape>) => {
   toast(error.message)
 }
 
+const formatNumber = (num: number) => {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' ,minimumFractionDigits: 2 }).format(num)
+}
+
 const Home: AppType = () => {
   const iconClassName = 'fill-white h-20 cursor-pointer'
   const audioRef = useRef<HTMLAudioElement>(null)
   const [address, setAddress] = useState<string>()
   const [isPlaying, setIsPlaying] = useState(false)
-  const { mutate: loginMutation, isLoading: isLoginLoading } = trpc.contract.login.useMutation({
+  const { mutate: loginMutation, isLoading: isLoginLoading, isSuccess } = trpc.contract.login.useMutation({
     onError
   })
   const { mutate: checkInMutation, isLoading: isCheckInLoading } = trpc.contract.checkIn.useMutation({
-    onError
+    onError,
+    onSuccess: () => {
+      toast('Check-in successful!')
+    }
   })
-  const { data, refetch } = trpc.contract.getUser.useQuery({ address }, {
-    enabled: Boolean(address) && !isCheckInLoading,
+  const { data, refetch, isFetching: isGetUserFetching, } = trpc.contract.getUser.useQuery({ address }, {
+    enabled: Boolean(address) && isSuccess,
     onError,
   })
 
@@ -42,6 +49,20 @@ const Home: AppType = () => {
     await refetch()
   }
 
+  const onPlayStop = () => {
+    if (!audioRef.current) {
+      return null
+    }
+
+    if (isPlaying) {
+      audioRef.current.pause()
+      setIsPlaying(false)
+    } else {
+      void audioRef.current.play()
+      setIsPlaying(true)
+    }
+  }
+
   const onMetamaskConnect = async () => {
     if (address?.length) {
       return null
@@ -49,6 +70,10 @@ const Home: AppType = () => {
 
     if (typeof window.ethereum === 'undefined') {
       return null
+    }
+    
+    if (!isPlaying) {
+      onPlayStop()
     }
 
     try {
@@ -62,18 +87,10 @@ const Home: AppType = () => {
     }
   }
 
-  const onPlayStop = () => {
-    if (isPlaying) {
-      audioRef.current?.pause()
-      setIsPlaying(false)
-    } else {
-      void audioRef.current?.play()
-      setIsPlaying(true)
-    }
-  }
-
   useEffect(() => {
-    const audio = new Audio(neon).play()
+    const audio = new Audio(neon)
+    audio.loop = true
+
     audioRef.current = audio
   }, [])
 
@@ -92,7 +109,7 @@ const Home: AppType = () => {
           </div>
         </div>
         <div className='col-span-4 flex flex-col justify-center items-center gap-y-12'>
-          <h1 className='text-5xl'>${balance}</h1>
+          <h1 className='text-5xl'>{!data && isGetUserFetching ? 'Loading...' : formatNumber(balance)}</h1>
           <Button isLoading={isLoginLoading || isCheckInLoading} onClick={() => address?.length ? void onCheckIn() : void onMetamaskConnect()}>
             {address?.length ? 'Check In' : 'Please Connect Your Metamask Wallet'}
           </Button>

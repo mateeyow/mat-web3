@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "next lint",
     "mat:getuser": "hardhat run --network localhost src/server/query-user.ts"
   },
   "dependencies": {
@@ -33,6 +33,7 @@
     "@types/react-dom": "^18.0.7",
     "autoprefixer": "10.4.15",
     "eslint-config-custom": "workspace:*",
+    "eslint-config-next": "13.5.4",
     "file-loader": "^6.2.0",
     "postcss": "8.4.29",
     "tailwindcss": "3.3.3",

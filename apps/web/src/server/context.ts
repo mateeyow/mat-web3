@@ -1,9 +1,9 @@
-import MATContract from "./contract"
+import MATContract from "./contract";
 
 export const createContext = () => {
-  const mat = new MATContract()
+  const mat = new MATContract();
 
   return {
-    mat
-  }
-}
+    mat,
+  };
+};

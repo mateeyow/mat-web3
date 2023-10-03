@@ -6,7 +6,9 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
-    "lint": {},
+    "lint": {
+      "cache": false
+    },
     "dev": {
       "dotEnv": [".env.development.local", ".env.local", ".env.development", ".env"],
       "cache": false,

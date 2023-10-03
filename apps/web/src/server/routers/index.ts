@@ -1,8 +1,8 @@
-import { router } from '../trpc.server'
-import { contractRouter } from './contract.router'
+import { router } from "../trpc.server";
+import { contractRouter } from "./contract.router";
 
 export const appRouter = router({
-  contract: contractRouter
-})
+  contract: contractRouter,
+});
 
-export type AppRouter = typeof appRouter
+export type AppRouter = typeof appRouter;

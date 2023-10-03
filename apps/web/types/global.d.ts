@@ -5,8 +5,3 @@ declare global {
     ethereum: MetaMaskInpageProvider
   }
 }
-
-// declare module '*.mp3' {
-//   const src: string;
-//   export default src;
-// }

@@ -12,16 +12,19 @@ const project = resolve(process.cwd(), "tsconfig.json");
  */
 module.exports = {
   extends: [
+    "@vercel/style-guide/eslint/browser",
     "@vercel/style-guide/eslint/node",
     "@vercel/style-guide/eslint/typescript",
-    "@vercel/style-guide/eslint/browser",
     "@vercel/style-guide/eslint/react",
     "@vercel/style-guide/eslint/next",
+    "eslint-config-prettier",
     "eslint-config-turbo",
-  ].map(require.resolve),
+  ].map(require.resolve)
+    .concat(['plugin:prettier/recommended']),
   parserOptions: {
     project,
   },
+  plugins: ["prettier"],
   globals: {
     React: true,
     JSX: true,
@@ -40,14 +43,16 @@ module.exports = {
   // add rules configurations here
   rules: {
     "import/no-default-export": "off",
-    "no-console": ["off", { "allow": ["warn", "error", "info"] }],
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "eol-last": ["error", "always"],
     "import/no-extraneous-dependencies": "off",
+    "import/no-named-as-default": "off",
+    "import/no-named-as-default-member": "off",
     "react/function-component-definition": "off",
     "react/button-has-type": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/no-unnecessary-condition": "off",
+    "no-console": ["off", { "allow": ["warn", "error", "info"] }],
+    "eol-last": ["error", "always"],
     "prefer-named-capture-group": "off",
   },
 };

@@ -1,8 +1,8 @@
-import { z } from 'zod'
-import { TRPCError } from '@trpc/server'
-import { procedure, router } from '../trpc.server'
-import { asyncResult, convertToDate } from '../util'
-import { CONTRACT_ERROR_MESSAGES } from '../constant';
+import { z } from "zod";
+import { TRPCError } from "@trpc/server";
+import { procedure, router } from "../trpc.server";
+import { asyncResult, convertToDate } from "../util";
+import { CONTRACT_ERROR_MESSAGES } from "../constant";
 
 interface BigNumber {
   gte: (_: BigNumber) => boolean;
@@ -38,128 +38,146 @@ interface NestedEthersError {
   };
 }
 
-const login = procedure.input(
-  z.object({
-    address: z.string()
-  })
-).mutation(async ({ input, ctx }) => {
-  const [returnedUser] = await asyncResult(() => ctx.mat.getUser(input.address))
-  
-  if (returnedUser) {
-    console.debug('User found', returnedUser)
+const login = procedure
+  .input(
+    z.object({
+      address: z.string(),
+    }),
+  )
+  .mutation(async ({ input, ctx }) => {
+    const [returnedUser] = await asyncResult(() =>
+      ctx.mat.getUser(input.address),
+    );
+
+    if (returnedUser) {
+      console.debug("User found", returnedUser);
+      return {
+        success: true,
+      };
+    }
+
+    const [_, createError] = await asyncResult(() =>
+      ctx.mat.createUser(input.address),
+    );
+    if (createError) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Error creating a new user",
+        cause: createError,
+      });
+    }
+
+    console.debug("Successfully created a new user");
     return {
-      success: true
-    }
-  }
+      success: true,
+    };
+  });
 
-  const [_, createError] = await asyncResult(() => ctx.mat.createUser(input.address))
-  if (createError) {
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Error creating a new user',
-      cause: createError,
-    })
-  }
+const getUser = procedure
+  .input(
+    z.object({
+      address: z.string(),
+    }),
+  )
+  .query(async ({ input, ctx }) => {
+    const [result, error] = await asyncResult(() =>
+      ctx.mat.getUser(input.address),
+    );
 
-  console.debug('Successfully created a new user')
-  return {
-    success: true
-  }
-})
+    if (error) {
+      console.error("Error getting user:", error);
+      const ethError = error as EthersError;
 
-const getUser = procedure.input(
-  z.object({
-    address: z.string()
-  })
-).query(async ({ input, ctx }) => {
-  const [result, error] = await asyncResult(() => ctx.mat.getUser(input.address))
+      if (ethError.reason?.includes(CONTRACT_ERROR_MESSAGES.USER_NOT_FOUND)) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
 
-  if (error) {
-    console.error('Error getting user:', error)
-    const ethError = error as EthersError
-
-    if (ethError.reason?.includes(CONTRACT_ERROR_MESSAGES.USER_NOT_FOUND)) {
       throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'User not found',
-      })
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Error getting user, please try again",
+        cause: error,
+      });
     }
 
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Error getting user, please try again',
-      cause: error,
-    })
-  }
-
-  if (!result) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: 'User not found',
-    })
-  }
-
-  const [user, balance] = result
-  console.log('user.lastCheckIn', user.lastCheckIn);
-
-  return {
-    lastCheckIn: convertToDate(user.lastCheckIn),
-    balance: Number(balance)
-  }
-})
-
-const checkIn = procedure.input(
-  z.object({
-    address: z.string()
-  })
-).mutation(async ({ input, ctx }) => {
-  console.debug(`Checking in ${input.address}`)
-  const [_, error] = await asyncResult(() => ctx.mat.checkIn(input.address))
-  if (error) {
-    console.error('Error checking in:', error)
-    const ethersError = error as EthersError
-
-    if (ethersError.reason?.includes(CONTRACT_ERROR_MESSAGES.USER_ALREADY_CHECKED_IN)) {
+    if (!result) {
       throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'User has already checked in today',
-      })
+        code: "NOT_FOUND",
+        message: "User not found",
+      });
     }
-    
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Error checking in, please try again',
-      cause: error,
-    })
-  }
 
-  const [result, getUserErr] = await asyncResult(() => ctx.mat.getUser(input.address))
-  if (getUserErr) {
-    console.error('Error getting user:', getUserErr)
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Error getting user, please try again',
-      cause: getUserErr,
-    })
-  }
+    const [user, balance] = result;
+    console.log("user.lastCheckIn", user.lastCheckIn);
 
-  if (!result) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: 'User not found.',
-    })
-  }
+    return {
+      lastCheckIn: convertToDate(user.lastCheckIn),
+      balance: Number(balance),
+    };
+  });
 
-  const [user, balance] = result
+const checkIn = procedure
+  .input(
+    z.object({
+      address: z.string(),
+    }),
+  )
+  .mutation(async ({ input, ctx }) => {
+    console.debug(`Checking in ${input.address}`);
+    const [_, error] = await asyncResult(() => ctx.mat.checkIn(input.address));
+    if (error) {
+      console.error("Error checking in:", error);
+      const ethersError = error as EthersError;
 
-  return {
-    lastCheckIn: convertToDate(user.lastCheckIn),
-    balance: Number(balance)
-  }
-})
+      if (
+        ethersError.reason?.includes(
+          CONTRACT_ERROR_MESSAGES.USER_ALREADY_CHECKED_IN,
+        )
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User has already checked in today",
+        });
+      }
+
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Error checking in, please try again",
+        cause: error,
+      });
+    }
+
+    const [result, getUserErr] = await asyncResult(() =>
+      ctx.mat.getUser(input.address),
+    );
+    if (getUserErr) {
+      console.error("Error getting user:", getUserErr);
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Error getting user, please try again",
+        cause: getUserErr,
+      });
+    }
+
+    if (!result) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "User not found.",
+      });
+    }
+
+    const [user, balance] = result;
+
+    return {
+      lastCheckIn: convertToDate(user.lastCheckIn),
+      balance: Number(balance),
+    };
+  });
 
 export const contractRouter = router({
   login,
   checkIn,
   getUser,
-})
+});

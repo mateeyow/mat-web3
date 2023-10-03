@@ -1,12 +1,12 @@
-'use client'
-import { httpBatchLink } from '@trpc/client';
-import { createTRPCNext } from '@trpc/next';
-import type { AppRouter } from '../server/routers'
+"use client";
+import { httpBatchLink } from "@trpc/client";
+import { createTRPCNext } from "@trpc/next";
+import type { AppRouter } from "../server/routers";
 
 function getBaseUrl() {
-  if (typeof window !== 'undefined')
+  if (typeof window !== "undefined")
     // browser should use relative path
-    return '';
+    return "";
   // eslint-disable-next-line turbo/no-undeclared-env-vars -- this is a next.js env var
   if (process.env.VERCEL_URL)
     // reference for vercel.com
@@ -43,9 +43,9 @@ export const trpc = createTRPCNext<AppRouter>({
         defaultOptions: {
           queries: {
             refetchOnWindowFocus: false,
-          }
-        }
-      }
+          },
+        },
+      },
     };
   },
   /**

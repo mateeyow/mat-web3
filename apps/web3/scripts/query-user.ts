@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 const { ALCHEMY_CONTRACT_ADDRESS = "", USER_ADDRESS = "" } = process.env;
 
 async function main() {
-  const NAME = "Mat"
+  const NAME = "Mat";
 
   const mat = await ethers.getContractAt(NAME, ALCHEMY_CONTRACT_ADDRESS);
 

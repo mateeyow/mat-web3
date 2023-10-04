@@ -12,7 +12,10 @@ module.exports = {
   parserOptions: {
     project,
   },
-  plugins: ["prettier"],
+  plugins: ["prettier", "jest"],
+  env: {
+    "jest/globals": true,
+  },
   settings: {
     "import/resolver": {
       typescript: {

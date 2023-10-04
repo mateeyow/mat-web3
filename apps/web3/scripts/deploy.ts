@@ -6,9 +6,9 @@ async function main() {
   await mat.waitForDeployment();
 
   const name = await mat.name();
-  const address = await mat.getAddress()
+  const address = await mat.getAddress();
 
-  console.log(`${name} has been deployed to ${address}`)
+  console.log(`${name} has been deployed to ${address}`);
 }
 
 main().catch((error) => {

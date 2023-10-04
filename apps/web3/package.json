@@ -2,7 +2,7 @@
   "name": "@mat/web3",
   "scripts": {
     "compile": "hardhat compile",
-    "lint": "eslint scripts/ test/ --ext .ts --fix",
+    "lint": "eslint . --ext .ts",
     "test": "REPORT_GAS=true hardhat test --network localhost",
     "dev": "hardhat node",
     "deploy": "hardhat run scripts/deploy.ts",

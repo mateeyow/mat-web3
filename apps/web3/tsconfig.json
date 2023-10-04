@@ -1,3 +1,5 @@
 {
-  "extends": "tsconfig/solidity.json"
+  "extends": "tsconfig/solidity.json",
+  "include": ["./test", "./scripts"],
+  "files": ["./hardhat.config.ts"]
 }

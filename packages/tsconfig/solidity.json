@@ -6,6 +6,5 @@
     "target": "es2020",
     "module": "commonjs",
     "resolveJsonModule": true
-  },
-  "include": ["test", "scripts"]
+  }
 }

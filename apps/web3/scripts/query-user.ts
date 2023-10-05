@@ -12,7 +12,7 @@ async function main() {
   console.log(
     `User: ${ALCHEMY_CONTRACT_ADDRESS} has balance of ${balance} and has checked in ${new Date(
       Number(user.lastCheckIn) * 1000,
-    )}`,
+    ).toDateString()}`,
   );
 }
 

@@ -26,3 +26,4 @@ pnpm dev
 - [ ] - Make page responsive
 - [ ] - Persist music preference and login connections using localStorage
 - [ ] - Add NFT
+- [ ] - Fix aliases

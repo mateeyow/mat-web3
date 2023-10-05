@@ -25,7 +25,7 @@ const formatNumber = (num: number) => {
 
 const Home: AppType = () => {
   const iconClassName = "fill-white h-20 cursor-pointer";
-  const audioRef = React.useRef<HTMLAudioElement>(null);
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
   const [address, setAddress] = React.useState<string>();
   const [isPlaying, setIsPlaying] = React.useState(false);
   const {
@@ -47,7 +47,7 @@ const Home: AppType = () => {
     refetch,
     isFetching: isGetUserFetching,
   } = trpc.contract.getUser.useQuery(
-    { address },
+    { address: address ?? "" },
     {
       enabled: Boolean(address) && isSuccess,
       onError,

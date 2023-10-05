@@ -52,9 +52,6 @@ export const UnmuteIcon = (props: SVGElementProps) => (
 
 export const CoinIcon = (props: SVGElementProps) => (
   <svg
-    style={{
-      enableBackground: "new 0 0 24 24",
-    }}
     viewBox="0 0 24 30"
     xmlSpace="preserve"
     xmlns="http://www.w3.org/2000/svg"

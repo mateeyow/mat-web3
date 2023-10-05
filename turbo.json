@@ -4,7 +4,12 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": [
+        "ALCHEMY_CONTRACT_ADDRESS",
+        "ALCHEMY_API_KEY",
+        "METAMASK_PRIVATE_KEY"
+      ]
     },
     "lint": {
       "cache": false

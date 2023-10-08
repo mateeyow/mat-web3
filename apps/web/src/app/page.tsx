@@ -33,15 +33,11 @@ const Home: AppType = () => {
     isLoading: isLoginLoading,
     isSuccess,
   } = trpc.contract.login.useMutation({
+    onSuccess: () => {
+      toast("Login successful!");
+    },
     onError,
   });
-  const { mutate: checkInMutation, isLoading: isCheckInLoading } =
-    trpc.contract.checkIn.useMutation({
-      onError,
-      onSuccess: () => {
-        toast("Check-in successful!");
-      },
-    });
   const {
     data,
     refetch,
@@ -53,16 +49,23 @@ const Home: AppType = () => {
       onError,
     },
   );
+  const { mutate: checkInMutation, isLoading: isCheckInLoading } =
+    trpc.contract.checkIn.useMutation({
+      onError,
+      onSuccess: async () => {
+        toast("Check-in successful!");
+        await refetch();
+      },
+    });
 
   const balance = data?.balance ?? 0.0;
 
-  const onCheckIn = async () => {
+  const onCheckIn = () => {
     if (!address?.length) {
       return null;
     }
 
     checkInMutation({ address });
-    await refetch();
   };
 
   const onPlayStop = () => {

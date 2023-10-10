@@ -24,6 +24,5 @@ pnpm dev
 - [ ] - Add github workflow
 - [ ] - Fix dev workflow to get the correct contract, artifacts, types, etc.
 - [ ] - Make page responsive
-- [ ] - Persist music preference and login connections using localStorage
 - [ ] - Add NFT
 - [ ] - Fix aliases

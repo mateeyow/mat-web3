@@ -10,7 +10,10 @@ import { PlayIcon, PauseIcon } from "@/components/icons";
 import { toast } from "@/components/toast";
 import { trpc } from "../utils/trpc";
 import neon from "./audio/neon.mp3";
+import { useLocalStorage } from "./hooks";
 
+const AUDIO_KEY = "MAT_AUDIO";
+const ADDRESS_KEY = "MAT_ADDRESS";
 const onError = (error: TRPCClientErrorBase<DefaultErrorShape>) => {
   toast(error.message);
 };
@@ -26,8 +29,11 @@ const formatNumber = (num: number) => {
 const Home: AppType = () => {
   const iconClassName = "fill-white h-20 cursor-pointer";
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
-  const [address, setAddress] = React.useState<string>();
-  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [address, setAddress] = useLocalStorage<string | null>(
+    ADDRESS_KEY,
+    null,
+  );
+  const [isPlaying, setIsPlaying] = useLocalStorage(AUDIO_KEY, false);
   const {
     mutate: loginMutation,
     isLoading: isLoginLoading,
@@ -114,6 +120,12 @@ const Home: AppType = () => {
 
     audioRef.current = audio;
   }, []);
+
+  React.useEffect(() => {
+    if (!data && address?.length) {
+      void refetch();
+    }
+  }, [data, address, refetch]);
 
   return (
     <main>

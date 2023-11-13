@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable @typescript-eslint/no-explicit-any -- Disable to allow any for a generic hooks */
 // Create a useLocaleStorage hook
 import React from "react";
@@ -21,10 +22,10 @@ const getLocalStorageServerSnapshot = () => {
 
 const removeLocalStorageItem = (key: string) => {
   window.localStorage.removeItem(key);
-  dispatchStorageEvent(key, null);
+  dispatchStorageEvent(key, "");
 };
 
-function dispatchStorageEvent(key: string, newValue: string | null) {
+function dispatchStorageEvent(key: string, newValue: string) {
   window.dispatchEvent(new StorageEvent("storage", { key, newValue }));
 }
 
@@ -37,11 +38,12 @@ const setLocalStorageItem = <T>(key: string, value: T) => {
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const getSnapshot = () => getLocalStorageItem(key);
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Clashes with other eslint rule
   const store = React.useSyncExternalStore(
     useLocalStorageSubscribe,
     getSnapshot,
     getLocalStorageServerSnapshot,
-  );
+  )!;
 
   const setState = React.useCallback(
     (v: T | ((prevState: T) => T)) => {

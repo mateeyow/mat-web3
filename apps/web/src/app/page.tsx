@@ -10,7 +10,7 @@ import { PlayIcon, PauseIcon } from "@/components/icons";
 import { toast } from "@/components/toast";
 import { trpc } from "../utils/trpc";
 import neon from "./audio/neon.mp3";
-import { useLocalStorage } from "./hooks";
+import { useLocalStorage } from "./hooks/use-local-storage";
 
 const AUDIO_KEY = "MAT_AUDIO";
 const ADDRESS_KEY = "MAT_ADDRESS";
@@ -29,11 +29,8 @@ const formatNumber = (num: number) => {
 const Home: AppType = () => {
   const iconClassName = "fill-white h-20 cursor-pointer";
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
-  const [address, setAddress] = useLocalStorage<string | null>(
-    ADDRESS_KEY,
-    null,
-  );
-  const [isPlaying, setIsPlaying] = useLocalStorage(AUDIO_KEY, false);
+  const [address, setAddress] = useLocalStorage(ADDRESS_KEY, "");
+  const [isPlaying, setIsPlaying] = useLocalStorage(AUDIO_KEY, "false");
   const {
     mutate: loginMutation,
     isLoading: isLoginLoading,
@@ -79,12 +76,12 @@ const Home: AppType = () => {
       return null;
     }
 
-    if (isPlaying) {
+    if (isPlaying === "true") {
       audioRef.current.pause();
-      setIsPlaying(false);
+      setIsPlaying("false");
     } else {
       void audioRef.current.play();
-      setIsPlaying(true);
+      setIsPlaying("true");
     }
   };
 
@@ -97,7 +94,7 @@ const Home: AppType = () => {
       return null;
     }
 
-    if (!isPlaying) {
+    if (isPlaying !== "true") {
       onPlayStop();
     }
 
@@ -132,7 +129,7 @@ const Home: AppType = () => {
       <Toaster position="top-left" />
       <div className="grid grid-cols-4 grid-rows-content h-screen">
         <div className="p-1">
-          {isPlaying ? (
+          {isPlaying === "true" ? (
             <PauseIcon className={iconClassName} onClick={onPlayStop} />
           ) : (
             <PlayIcon className={iconClassName} onClick={onPlayStop} />
